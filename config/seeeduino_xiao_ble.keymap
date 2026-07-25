@@ -2,16 +2,19 @@
 #include <dt-bindings/zmk/keys.h>
 #include <dt-bindings/zmk/bt.h>
 #include <dt-bindings/zmk/matrix_transform.h>
-#include <dt-bindings/zmk/mouse.h>
+
+/* Boost max speed from default 600 to 1500 */
+#define ZMK_POINTING_DEFAULT_MOVE_VAL 1500  
+#include <dt-bindings/zmk/pointing.h>
+
+/* Override the default mmv behavior parameters */
+&mmv {
+    acceleration-exponent = <2>;      /* 1 = linear ramp, 2 = aggressive acceleration */
+    time-to-max-speed-ms = <500>;    /* Ramping time */
+    delay-ms = <0>;                   /* Instant response on press */
+};
 
 / {
-    behaviors {
-        mmv {
-            acceleration-exponent = <2>;      /* 1 = linear ramp, 2 = aggressive acceleration */
-            time-to-max-speed-ms = <500>;    /* Takes only 300ms to hit top speed */
-            delay-ms = <0>;                   /* Instant response on press */
-        };
-    };
     chosen {
         zmk,kscan = &kscan0;
         zmk,matrix_transform = &default_transform;
