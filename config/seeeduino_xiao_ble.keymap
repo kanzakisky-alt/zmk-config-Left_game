@@ -76,10 +76,10 @@
         /* Layer 3: Mouse Layer */
         mouse_layer {
             bindings = <
-                &msc SCROLL_UP   &mkp LCLK       &mmv MOVE_UP   &mkp RCLK        &none
-                &msc SCROLL_DOWN &mmv MOVE_LEFT  &mmv MOVE_DOWN &mmv MOVE_RIGHT  &none
-                &to 2            &msc SCROLL_LEFT &msc SCROLL_RIGHT &kp LEFT     &kp RIGHT
-                &none            &none           &none          &mkp LCLK        &mkp RCLK
+                &msc SCROLL_UP   &mkp LCLK        &mmv MOVE_UP    &mkp RCLK        &none
+                &msc SCROLL_DOWN &mmv MOVE_LEFT   &mmv MOVE_DOWN  &mmv MOVE_RIGHT  &none
+                &to 2            &msc SCROLL_LEFT &msc SCROLL_RIGHT &kp LEFT       &kp RIGHT
+                &none            &none            &none           &mkp LCLK        &mkp RCLK
             >;
         };
     };
