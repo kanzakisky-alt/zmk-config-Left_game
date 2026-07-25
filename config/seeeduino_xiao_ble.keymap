@@ -4,7 +4,7 @@
 #include <dt-bindings/zmk/matrix_transform.h>
 
 /* Global mouse movement speed (Fast default: 2500) */
-#define ZMK_POINTING_DEFAULT_MOVE_VAL 2500  
+#define ZMK_POINTING_DEFAULT_MOVE_VAL 5000  
 #define ZMK_POINTING_DEFAULT_SCRL_VAL 20
 #include <dt-bindings/zmk/pointing.h>
 
@@ -21,8 +21,8 @@
         mmv_slow: mmv_slow {
             compatible = "zmk,behavior-point-device-move";
             #binding-cells = <1>;
-            move-value = <1000>;              /* Slow speed: 1000 */
-            acceleration-exponent = <1>;      /* Linear acceleration for fine control */
+            move-value = <1000>;              /* Precision speed: 1000 */
+            acceleration-exponent = <1>;      /* Linear acceleration for predictable aiming */
             time-to-max-speed-ms = <300>;
             delay-ms = <0>;
         };
@@ -117,13 +117,23 @@
             >;
         };
 
-        /* Layer 1: Mouse Control & Zoom Shortcuts */
+        /* Layer 1: Normal Mouse Control (2500 Speed) */
         mouse_layer {
             bindings = <
-                &msc SCRL_UP    &mkp LCLK            &mmv MOVE_UP        &mkp RCLK       &win_sleep
-                &msc SCRL_DOWN  &mmv MOVE_LEFT       &mmv MOVE_DOWN      &mmv MOVE_RIGHT &zoom_in
-                &to 0           &msc SCRL_LEFT       &msc SCRL_RIGHT     &zoom_reset     &zoom_out
-                &none           &none                &none               &none           &mkp LCLK
+                &msc SCRL_UP    &mkp LCLK       &mmv MOVE_UP     &mkp RCLK       &win_sleep
+                &msc SCRL_DOWN  &mmv MOVE_LEFT  &mmv MOVE_DOWN   &mmv MOVE_RIGHT &zoom_in
+                &to 0           &msc SCRL_LEFT  &msc SCRL_RIGHT  &zoom_reset     &zoom_out
+                &none           &none           &none            &mo 2           &mkp LCLK
+            >;
+        };
+
+        /* Layer 2: Precision Mouse Hold (1000 Speed) */
+        mouse_slow_layer {
+            bindings = <
+                &trans          &trans               &mmv_slow MOVE_UP   &trans          &trans
+                &trans          &mmv_slow MOVE_LEFT  &mmv_slow MOVE_DOWN &mmv_slow MOVE_RIGHT &trans
+                &trans          &trans               &trans              &trans          &trans
+                &trans          &trans               &trans              &trans          &trans
             >;
         };
     };
