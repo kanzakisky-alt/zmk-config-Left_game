@@ -2,6 +2,7 @@
 #include <dt-bindings/zmk/keys.h>
 #include <dt-bindings/zmk/bt.h>
 #include <dt-bindings/zmk/matrix_transform.h>
+#include <dt-bindings/zmk/mouse.h>
 
 / {
     chosen {
@@ -9,7 +10,6 @@
         zmk,matrix_transform = &default_transform;
     };
 
-    /* Full 20-key 4x5 Matrix Transform */
     default_transform: keymap_transform_0 {
         compatible = "zmk,matrix-transform";
         columns = <5>;
@@ -43,21 +43,43 @@
     keymap {
         compatible = "zmk,keymap";
 
+        /* Layer 0: Gamepad / WASD Base Layer */
         default_layer {
             bindings = <
                 &kp ESC    &kp Q     &kp W     &kp E     &kp R
                 &kp TAB    &kp A     &kp S     &kp D     &kp F
                 &kp LSHIFT &kp Z     &kp X     &kp C     &kp V
-                &none      &none     &none     &to 1     &kp SPACE
+                &none      &none     &none     &mo 1     &kp SPACE
             >;
         };
 
+        /* Layer 1: Fn / Number Layer */
         fn_layer {
             bindings = <
-                &kp T      &kp N1    &kp N2    &kp N3    &kp N4
+                &to 2      &kp N1    &kp N2    &kp N3    &kp N4
                 &kp Y      &kp N5    &kp N6    &kp N7    &kp N8
                 &bt BT_CLR &kp N9    &kp N0    &trans    &trans
-                &none      &none     &none     &to 0     &bt BT_CLR_ALL
+                &none      &none     &none     &trans    &bt BT_CLR_ALL
+            >;
+        };
+
+        /* Layer 2: YouTube / Navigation Layer */
+        youtube_layer {
+            bindings = <
+                &to 0      &kp HOME  &kp UP    &kp END   &kp F
+                &kp LCTRL  &kp LEFT  &kp DOWN  &kp RIGHT &kp C
+                &tog 3     &kp J     &none     &kp L     &none
+                &none      &none     &none     &mo 3     &kp SPACE
+            >;
+        };
+
+        /* Layer 3: Mouse Layer */
+        mouse_layer {
+            bindings = <
+                &msc SCROLL_UP   &mkp LCLK       &mmv MOVE_UP   &mkp RCLK        &none
+                &msc SCROLL_DOWN &mmv MOVE_LEFT  &mmv MOVE_DOWN &mmv MOVE_RIGHT  &none
+                &to 2            &msc SCROLL_LEFT &msc SCROLL_RIGHT &kp LEFT     &kp RIGHT
+                &none            &none           &none          & LCLK           &RCLK
             >;
         };
     };
