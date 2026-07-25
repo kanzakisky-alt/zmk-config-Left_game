@@ -4,11 +4,11 @@
 #include <dt-bindings/zmk/matrix_transform.h>
 
 /* Global mouse movement speed (Fast default: 2500) */
-#define ZMK_POINTING_DEFAULT_MOVE_VAL 5000  
+#define ZMK_POINTING_DEFAULT_MOVE_VAL 4000  
 #define ZMK_POINTING_DEFAULT_SCRL_VAL 20
 #include <dt-bindings/zmk/pointing.h>
 
-/* Override default mmv behavior parameters (Fast) */
+/* Override default mmv behavior parameters */
 &mmv {
     acceleration-exponent = <2>;
     time-to-max-speed-ms = <500>;
@@ -16,18 +16,6 @@
 };
 
 / {
-    behaviors {
-        /* Define custom slow movement behavior for precision control */
-        mmv_slow: mmv_slow {
-            compatible = "zmk,behavior-point-device-move";
-            #binding-cells = <1>;
-            move-value = <1000>;              /* Precision speed: 1000 */
-            acceleration-exponent = <1>;      /* Linear acceleration for predictable aiming */
-            time-to-max-speed-ms = <300>;
-            delay-ms = <0>;
-        };
-    };
-
     macros {
         /* Win + X -> U -> S macro to safely put Windows to sleep */
         win_sleep: win_sleep {
@@ -130,10 +118,10 @@
         /* Layer 2: Precision Mouse Hold (1000 Speed) */
         mouse_slow_layer {
             bindings = <
-                &trans          &trans               &mmv_slow MOVE_UP   &trans          &trans
-                &trans          &mmv_slow MOVE_LEFT  &mmv_slow MOVE_DOWN &mmv_slow MOVE_RIGHT &trans
-                &trans          &trans               &trans              &trans          &trans
-                &trans          &trans               &trans              &trans          &trans
+                &trans          &trans               &mmv MOVE_Y(-3000)  &trans               &trans
+                &trans          &mmv MOVE_X(-3000)   &mmv MOVE_Y(3000)   &mmv MOVE_X(3000)    &trans
+                &trans          &trans               &trans              &trans               &trans
+                &trans          &trans               &trans              &trans               &trans
             >;
         };
     };
