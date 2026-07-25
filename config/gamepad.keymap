@@ -1,1 +1,49 @@
-/*this is for the keymap and setting the gpio pins for keyboard
+#include <behaviors.dtsi>
+#include <dt-bindings/zmk/keys.h>
+#include <dt-bindings/zmk/bt.h>
+
+/ {
+    kscan0: kscan {
+        compatible = "zmk,kscan-gpio-matrix";
+        diode-direction = "col2row";
+
+        /* Rows connected to D10, D9, D8, D7 */
+        row-gpios
+            = <&xiao_d 10 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>
+            = <&xiao_d 9  (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>
+            = <&xiao_d 8  (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>
+            = <&xiao_d 7  (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>
+            ;
+
+        /* Columns connected to D1, D2, D3, D4, D5 */
+        col-gpios
+            = <&xiao_d 1 GPIO_ACTIVE_HIGH>
+            = <&xiao_d 2 GPIO_ACTIVE_HIGH>
+            = <&xiao_d 3 GPIO_ACTIVE_HIGH>
+            = <&xiao_d 4 GPIO_ACTIVE_HIGH>
+            = <&xiao_d 5 GPIO_ACTIVE_HIGH>
+            ;
+    };
+
+    keymap {
+        compatible = "zmk,keymap";
+
+        default_layer {
+            bindings = <
+                &kp ESC    &kp Q     &kp W     &kp E     &kp R
+                &kp TAB    &kp A     &kp S     &kp D     &kp F
+                &kp LSHIFT &kp Z     &kp X     &kp C     &kp V
+                &kp LCTRL  &kp LALT  &mo 1     &kp SPACE &kp G
+            >;
+        };
+
+        fn_layer {
+            bindings = <
+                &kp T1     &kp N1    &kp N2    &kp N3    &kp N4
+                &kp T2     &kp N5    &kp N6    &kp N7    &kp N8
+                &bt BT_CLR &kp N9    &kp N0    &trans    &trans
+                &trans     &trans    &trans    &trans    &bootloader
+            >;
+        };
+    };
+};
