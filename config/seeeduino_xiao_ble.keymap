@@ -5,6 +5,13 @@
 #include <dt-bindings/zmk/mouse.h>
 
 / {
+    behaviors {
+        mmv {
+            acceleration-exponent = <2>;      /* 1 = linear ramp, 2 = aggressive acceleration */
+            time-to-max-speed-ms = <500>;    /* Takes only 300ms to hit top speed */
+            delay-ms = <0>;                   /* Instant response on press */
+        };
+    };
     chosen {
         zmk,kscan = &kscan0;
         zmk,matrix_transform = &default_transform;
