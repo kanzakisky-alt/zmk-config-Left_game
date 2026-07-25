@@ -3,18 +3,64 @@
 #include <dt-bindings/zmk/bt.h>
 #include <dt-bindings/zmk/matrix_transform.h>
 
-/* Boost max speed from default 600 to 1500 */
-#define ZMK_POINTING_DEFAULT_MOVE_VAL 1500  
+/* Global mouse movement speed */
+#define ZMK_POINTING_DEFAULT_MOVE_VAL 2000  
 #include <dt-bindings/zmk/pointing.h>
 
-/* Override the default mmv behavior parameters */
+/* Override default mmv behavior parameters */
 &mmv {
-    acceleration-exponent = <2>;      /* 1 = linear ramp, 2 = aggressive acceleration */
-    time-to-max-speed-ms = <500>;    /* Ramping time */
-    delay-ms = <0>;                   /* Instant response on press */
+    acceleration-exponent = <2>;
+    time-to-max-speed-ms = <500>;
+    delay-ms = <0>;
+};
+
+/* Slow mode override for precision mouse control */
+&mmv_slow {
+    time-to-max-speed-ms = <1000>;
 };
 
 / {
+    macros {
+        /* Win + X -> U -> S macro with delays to safely put Windows to sleep */
+        win_sleep: win_sleep {
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            wait-ms = <100>;
+            tap-ms = <100>;
+            bindings
+                = <&kp LG(X)>
+                , <&kp U>
+                , <&kp S>;
+        };
+
+        /* Zoom In: Ctrl + Equal (Plus) */
+        zoom_in: zoom_in {
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            bindings = <&macro_press &kp LCTRL>
+                     , <&macro_tap &kp EQUAL>
+                     , <&macro_release &kp LCTRL>;
+        };
+
+        /* Zoom Out: Ctrl + Minus */
+        zoom_out: zoom_out {
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            bindings = <&macro_press &kp LCTRL>
+                     , <&macro_tap &kp MINUS>
+                     , <&macro_release &kp LCTRL>;
+        };
+
+        /* Reset Zoom: Ctrl + 0 */
+        zoom_reset: zoom_reset {
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            bindings = <&macro_press &kp LCTRL>
+                     , <&macro_tap &kp N0>
+                     , <&macro_release &kp LCTRL>;
+        };
+    };
+
     chosen {
         zmk,kscan = &kscan0;
         zmk,matrix_transform = &default_transform;
@@ -53,43 +99,23 @@
     keymap {
         compatible = "zmk,keymap";
 
-        /* Layer 0: Gamepad / WASD Base Layer */
+        /* Layer 0: Nav / Media / Bluetooth */
         default_layer {
             bindings = <
-                &kp ESC    &kp Q     &kp W     &kp E     &kp R
-                &kp TAB    &kp A     &kp S     &kp D     &kp F
-                &kp LSHIFT &kp Z     &kp X     &kp C     &kp V
-                &none      &none     &none     &mo 1     &kp SPACE
+                &kp ESC     &kp HOME   &kp UP          &kp END             &kp F
+                &kp TAB     &kp LEFT   &kp DOWN        &kp RIGHT           &bt BT_SEL 0
+                &kp LSHIFT  &kp LCTRL  &bt BT_CLR      &bt BT_CLR_ALL      &bt BT_SEL 1
+                &none       &none      &none           &tog 1              &kp SPACE
             >;
         };
 
-        /* Layer 1: Fn / Number Layer */
-        fn_layer {
-            bindings = <
-                &to 2      &kp N1    &kp N2    &kp N3    &kp N4
-                &kp Y      &kp N5    &kp N6    &kp N7    &kp N8
-                &bt BT_CLR &kp N9    &kp N0    &trans    &trans
-                &none      &none     &none     &trans    &bt BT_CLR_ALL
-            >;
-        };
-
-        /* Layer 2: YouTube / Navigation Layer */
-        youtube_layer {
-            bindings = <
-                &to 0      &kp HOME  &kp UP    &kp END   &kp F
-                &kp LCTRL  &kp LEFT  &kp DOWN  &kp RIGHT &kp C
-                &tog 3     &kp J     &none     &kp L     &none
-                &none      &none     &none     &mo 3     &kp SPACE
-            >;
-        };
-
-        /* Layer 3: Mouse Layer */
+        /* Layer 1: Mouse Control & Zoom Shortcuts */
         mouse_layer {
             bindings = <
-                &none            &mkp LCLK        &mmv MOVE_UP    &mkp RCLK        &none
-                &none            &mmv MOVE_LEFT   &mmv MOVE_DOWN  &mmv MOVE_RIGHT  &none
-                &to 2            &none            &mkp MCLK       &kp LEFT         &kp RIGHT
-                &none            &none            &none           &mkp LCLK        &mkp RCLK
+                &msc MOVE_UP    &mkp LCLK       &mmv MOVE_UP     &mkp RCLK       &win_sleep
+                &msc MOVE_DOWN  &mmv MOVE_LEFT  &mmv MOVE_DOWN   &mmv MOVE_RIGHT &zoom_in
+                &tog 1          &msc MOVE_LEFT  &msc MOVE_RIGHT  &zoom_reset     &zoom_out
+                &none           &none           &none            &mmv_slow       &mkp LCLK
             >;
         };
     };
