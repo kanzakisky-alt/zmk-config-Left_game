@@ -17,4 +17,10 @@
 #     cmake-args: -DCONFIG_ZMK_STUDIO=y
 #     artifact-name: corne_left_with_studio
 #
----
+# Enable Bluetooth & Deep Sleep
+CONFIG_ZMK_BLE=y
+CONFIG_ZMK_SLEEP=y
+CONFIG_ZMK_KEYBOARD_NAME="Left Gamepad"
+
+# Disable split mode so this operates 100% standalone
+CONFIG_ZMK_SPLIT=n
